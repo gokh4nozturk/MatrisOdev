@@ -8,7 +8,7 @@ namespace MatrisOdev
         //Değişken isimlendirme formatı olarak Camel Case kullanılmıştır.
 
         public static Random rnd = new Random();
-        public static int[,] dizi = new int[10, 10];
+        public static int[,] matris = new int[10, 10];
         public static string yon = "";
 
         //bombaların konumları.
@@ -22,33 +22,75 @@ namespace MatrisOdev
         public static int baslangicY = 0;
 
         //labirentin içindeki yollar.
-        public static int yol1X = 2;
+        public static int yolX = 1;
         public static int yol1Y = rnd.Next(1, 9);
         public static int isControlYol1Y = yol1Y;
+        public static int yol2Y = rnd.Next(1, 9);
 
         public static void MatrisCiz()
         {
             //yollar için çakışmama durumunu kontrol etmemiz gereken yer burasıdır.
-            for (int i = 1; i <= 10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    if (i == yol1X && j == yol1Y)
+                    if (i == yolX && j == yol1Y)
                     {
-                        Console.BackgroundColor = ConsoleColor.Green;
-                        dizi[i, j] = 1;//yol dışına çıkıp çıkmama durumunu dizinin değerinden kontrol edeceğiz.
-                        Console.Write(1);
-                        Console.ResetColor();
-                        Console.Write("|");
-                        yol1X++;//yol için her satırda alta inmesini sağlıyoruz.
-                        if (yol1Y < 9 || isControlYol1Y != yol1Y)
+                        matris[i, j] = 1;//yol dışına çıkıp çıkmama durumunu dizinin değerinden kontrol edeceğiz.
+                        yolX++;//yol için her satırda alta inmesini sağlıyoruz.
+                        if ((yol1Y >= 1 && yol1Y < 8) && matris[i, j] == 1)
                         {
                             yol1Y++;
                         }
+                        else if (yol1Y > 1 && matris[i, j] == 1)
+                        {
+                            yol1Y -= 1;
+                        }
+                    }
+                    else if (i == yolX && j == yol2Y)
+                    {
+                        matris[i, j] = 2;//yol dışına çıkıp çıkmama durumunu dizinin değerinden kontrol edeceğiz.
+                        yolX++;//yol için her satırda alta inmesini sağlıyoruz.
+                        if ((yol2Y >= 1 && yol2Y < 8) && matris[i, j] == 2)
+                        {
+                            yol2Y++;
+                        }
+                        else if (yol2Y > 1 && matris[i, j] == 2)
+                        {
+                            yol2Y -= 1;
+                        }
                     }
                     else
-                    { 
-                        Console.Write(0+"|");
+                    {
+                        matris[i, j] = 0;
+                    }
+                }
+            }
+        }
+
+        public static void MatrisGetir()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    if (matris[i,j] == 1)
+                    {
+                        Console.BackgroundColor = ConsoleColor.DarkRed;
+                        Console.Write(matris[i, j]);
+                        Console.ResetColor();
+                        Console.Write("|");
+                    }
+                    else if (matris[i, j] == 2)
+                    {
+                        Console.BackgroundColor = ConsoleColor.DarkGreen;
+                        Console.Write(matris[i, j]);
+                        Console.ResetColor();
+                        Console.Write("|");
+                    }
+                    else
+                    {
+                        Console.Write(matris[i, j] + "|");
                     }
                 }
                 Console.WriteLine();
@@ -56,16 +98,16 @@ namespace MatrisOdev
             Console.WriteLine();
         }
 
-
         static void Main(string[] args)
         {
             Console.WriteLine("Oynama şekli: yeşil renkli alan başlangıç noktasını gösterir.\nw: yukarı, a: sola, s: aşağı, d: sağa yönlendirir.\n");
 
             MatrisCiz();
+            MatrisGetir();
 
-            Console.Write("Yön belirtiniz :");
-            yon = Console.ReadLine();
-
+            //Console.Write("Yön belirtiniz :");
+            //yon = Console.ReadLine();
+            //Console.WriteLine(yon);
             Console.ReadKey();
         }
     }
