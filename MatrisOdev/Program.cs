@@ -9,6 +9,7 @@ namespace MatrisOdev
 
         public static Random rnd = new Random();
         public static int[,] dizi = new int[10, 10];
+        public static string yon = "";
 
         //bombaların konumları.
         public static int bomba1X = rnd.Next(1, 10);
@@ -35,11 +36,11 @@ namespace MatrisOdev
                     if (i == yol1X && j == yol1Y)
                     {
                         Console.BackgroundColor = ConsoleColor.Green;
-                        dizi[i, j] = 1;
+                        dizi[i, j] = 1;//yol dışına çıkıp çıkmama durumunu dizinin değerinden kontrol edeceğiz.
                         Console.Write(1);
                         Console.ResetColor();
                         Console.Write("|");
-                        yol1X++;
+                        yol1X++;//yol için her satırda alta inmesini sağlıyoruz.
                         if (yol1Y < 9 || isControlYol1Y != yol1Y)
                         {
                             yol1Y++;
@@ -58,10 +59,6 @@ namespace MatrisOdev
 
         static void Main(string[] args)
         {
-            
-            string yon = "";
-
-            
             Console.WriteLine("Oynama şekli: yeşil renkli alan başlangıç noktasını gösterir.\nw: yukarı, a: sola, s: aşağı, d: sağa yönlendirir.\n");
 
             MatrisCiz();
