@@ -38,7 +38,7 @@ namespace MatrisOdev
 
         //labirentin içindeki yollar.
         public static int yolX = 0;
-        public static int yol1Y = rnd.Next(1, 3);
+        public static int yol1Y = rnd.Next(0, 3);
         public static int isControlYol1Y = yol1Y;
         public static int yol2X = 0;
         public static int yol2Y= rnd.Next(3, 5);
@@ -52,7 +52,7 @@ namespace MatrisOdev
         public static void MatrisCiz()
         {
             //yollar için çakışmama durumunu kontrol etmemiz gereken yer burasıdır.
-            if (yol1Y == yol2Y || yol1Y == yol3Y) yol1Y = rnd2.Next(1, 2);
+            if (yol1Y == yol2Y || yol1Y == yol3Y) yol1Y = rnd2.Next(0, 2);
             else if (yol2Y == yol1Y || yol2Y == yol3Y) yol2Y = rnd2.Next(3, 5);
             else if (yol3Y == yol2Y || yol3Y == yol1Y) yol3Y = rnd2.Next(5, 8);
             else
@@ -392,11 +392,9 @@ namespace MatrisOdev
                     {
                         if (i == j)
                         {
-                            //burası yola eriştiğimiz yer seçimi yaptıktan "k" yazdırıyoruz.
-                            //KullaniciIsaretle(isControlKullaniciGiris, i, j);
+                            //burası yola eriştiğimiz yer seçimi yaptıktan "k" yazdırmak için matrisin elemanını işaretliyoruz.
                             matris[9, j] = 3;
                             KonsolTemizle();
-                            
                         }
                     }
                 }
