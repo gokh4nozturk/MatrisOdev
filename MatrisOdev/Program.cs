@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace MatrisOdev
@@ -18,11 +19,17 @@ namespace MatrisOdev
         public static int[,] matris = new int[10, 10];
         public static int[] kullaniciGiris = new int[10];
         public static string yol = "";
+        public static string yon = "";
+        public static int puan = 0;
+
+
         public static bool varMiBomba1 = true;
         public static bool varMiBomba2 = true;
         public static int isControlBombaIslemleri = 0;
-        public static bool isControlGamePlay = true;
-        public static bool isControlBasla = true;       
+        public static bool isControlKullaniciIsaretle = true;
+        public static bool isControlBasla = true;
+        public static bool isControlYonSecimi = true;
+        public static bool isControlOyunBittiMi = true;
 
         //bombaların konumları.
         public static int bomba1X = rnd.Next(1, 9);
@@ -46,7 +53,11 @@ namespace MatrisOdev
         public static int yol3Y = rnd.Next(5, 8);
 
         //yolun genisligini ayarlamak icin kullanılıyor.
-        public static int genislik = 0;        
+        public static int genislik = 0;
+
+        //kullanıcının dinamik konumunu tutmak için kullanılıyor.
+        public static int col = 0;
+        public static int row = 0;
 
         //matrisin saf halini çizer.
         public static void MatrisCiz()
@@ -308,6 +319,7 @@ namespace MatrisOdev
             }
         }
 
+        //konsol ekranını düzenleme için kullandığımız metottur.
         public static void KonsolTemizle()
         {
             Console.Clear();
@@ -316,26 +328,148 @@ namespace MatrisOdev
             GirisBelirle();
         }
 
-        //oyunda yukarı yönü kontroledeceğimiz metot.
+        //kullanicinin dinamik konum bilgileri için kullanılır.
+        public static void KullaniciKonum()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    if(matris[i,j] == 3)
+                    {
+                        // Console.WriteLine("{0}. satır {1}. sütunda bulunmaktadır.", i+1,j+1);
+                        col = i;
+                        row = j;
+                    }
+                }
+            }
+        }
+
+        //oyunda yukarı yönü kontrol edeceğimiz metot.
         public static void ImlecYukari()
         {
-
+            KullaniciKonum();
+            //Console.WriteLine(matris[col, row]);
+            if(col > 0)
+            {
+                if (matris[col - 1, row] == 1)
+                {
+                    matris[col, row] = 1;
+                    matris[col - 1, row] = 3;
+                    puan += 5;
+                    KonsolTemizle();
+                }
+                else if (matris[col - 1, row] == 0)
+                {
+                    Console.WriteLine("Duvara çarptınız ve puan kaybettiniz. Lütfen yeşil bölgede kalmaya çalışınız.");
+                    puan -= 5;
+                }
+                else if (matris[col - 1, row] == 2)
+                {
+                    BombaGoster();
+                    OyunuBitir(2);
+                }
+                else
+                {
+                    col = 0;
+                    row = 0;
+                }
+            }
+            else if (col == 0)
+            {
+                Console.WriteLine("success");
+            }
         }
 
-        //oyunda sol yönü kontroledeceğimiz metot.
+        //oyunda sol yönü kontrol edeceğimiz metot.
         public static void ImlecSola()
         {
+            KullaniciKonum();
 
+            if (matris[col, row - 1] == 1 && col > 0)
+            {
+                matris[col, row] = 1;
+                matris[col, row - 1] = 3;
+                puan += 5;
+                KonsolTemizle();
+            }
+            else if (matris[col, row - 1] == 0)
+            {
+                Console.WriteLine("Duvara çarptınız ve puan kaybettiniz. Lütfen yeşil bölgede kalmaya çalışınız.");
+                puan -= 5;
+            }
+            else if (matris[col, row - 1] == 2)
+            {
+                BombaGoster();
+                OyunuBitir(2);
+            }
+            else
+            {
+                col = 0;
+                row = 0;
+            }
         }
 
-        //oyunda aşağı yönü kontroledeceğimiz metot.
+        //oyunda aşağı yönü kontrol edeceğimiz metot.
         public static void ImlecAsagi()
         {
+            KullaniciKonum();
 
+            if (matris[col + 1, row] == 1 && col < 9)
+            {
+                matris[col, row] = 1;
+                matris[col + 1, row] = 3;
+                puan += 5;
+                KonsolTemizle();
+            }
+            else if (matris[col + 1, row] == 0)
+            {
+                Console.WriteLine("Duvara çarptınız ve puan kaybettiniz. Lütfen yeşil bölgede kalmaya çalışınız.");
+                puan -= 5;
+            }
+            else if (matris[col + 1, row] == 2)
+            {
+                BombaGoster();
+                OyunuBitir(2);
+            }
+            else
+            {
+                col = 0;
+                row = 0;
+            }
         }
 
-        //oyunda sağ yönü kontroledeceğimiz metot.
+        //oyunda sağ yönü kontrol edeceğimiz metot.
         public static void ImlecSaga()
+        {
+            KullaniciKonum();
+
+            if (matris[col, row + 1] == 1 && col < 9)
+            {
+                matris[col, row] = 1;
+                matris[col, row + 1] = 3;
+                puan += 5;
+                KonsolTemizle();
+            }
+            else if (matris[col, row + 1] == 0)
+            {
+                Console.WriteLine("Duvara çarptınız ve puan kaybettiniz. Lütfen yeşil bölgede kalmaya çalışınız.");
+                puan -= 5;
+            }
+            else if (matris[col, row + 1] == 2)
+            {
+                BombaGoster();
+                OyunuBitir(2);
+            }
+            else
+            {
+                col = 0;
+                row = 0;
+            }
+        }
+
+        //oyun bittiğinde gelişen akış kontrolü için kullanılır.
+        public static void OyunuBitir(int sebep)
         {
 
         }
@@ -351,36 +485,39 @@ namespace MatrisOdev
         //yol seçimini kontrol edeceğimiz metot.
         public static void YolSecimi(string yol)
         {
-            while (isControlGamePlay)
+            while (isControlKullaniciIsaretle)
             {
                 if (yol == "1")
                 {
                     Console.WriteLine(yol + ".yoldasınız.");
-                    GamePlay(Convert.ToInt32(yol));
-                    isControlGamePlay = !isControlGamePlay;
+                    KullaniciIsaretle(Convert.ToInt32(yol));
+                    isControlKullaniciIsaretle = !isControlKullaniciIsaretle;
+                    Playing(yol);
                 }
                 else if (yol == "2")
                 {
                     Console.WriteLine(yol + ".yoldasınız.");
-                    GamePlay(Convert.ToInt32(yol));
-                    isControlGamePlay = !isControlGamePlay;
+                    KullaniciIsaretle(Convert.ToInt32(yol));
+                    isControlKullaniciIsaretle = !isControlKullaniciIsaretle;
+                    Playing(yol);
                 }
                 else if (yol == "3")
                 {
                     Console.WriteLine(yol + ".yoldasınız.");
-                    GamePlay(Convert.ToInt32(yol));
-                    isControlGamePlay = !isControlGamePlay;
+                    KullaniciIsaretle(Convert.ToInt32(yol));
+                    isControlKullaniciIsaretle = !isControlKullaniciIsaretle;
+                    Playing(yol);
                 }
                 else
                 {
                     Console.WriteLine("Hatalı giriş yaptınız!!! Yeniden deneyiniz!");
-                    isControlGamePlay = !isControlGamePlay;
+                    isControlKullaniciIsaretle = !isControlKullaniciIsaretle;
                 }
             }
         }
 
-        //oyun kontrolü için kullanacağımız metot.
-        public static void GamePlay(int yol)
+        //kullanıcıyı labirente sokmak için kullanacağımız metot.
+        public static void KullaniciIsaretle(int yol)
         {
             isControlBasla = !isControlBasla;
             for (int i = 0; i < kullaniciGiris.Length; i++)
@@ -403,6 +540,35 @@ namespace MatrisOdev
             
         }
 
+        //oyun akışını sağladığımız metottur.
+        public static void Playing(string yol)
+        {
+            while (isControlOyunBittiMi)
+            {
+                Console.Write("Yönünüzü belirtiniz : ");
+                yon = Console.ReadLine();
+                if (yon == "w")
+                {
+                    ImlecYukari();
+                }
+                else if (yon == "a")
+                {
+                    ImlecSola();
+                }
+                else if (yon == "s")
+                {
+                    ImlecAsagi();
+                }
+                else if (yon == "d")
+                {
+                    ImlecSaga();
+                }
+                else
+                {
+                    Console.WriteLine("Hatalı giriş yaptınız!!! Tekrar deneyiniz!");
+                }
+            }
+        }
 
         public static void Basla()
         {
@@ -418,7 +584,7 @@ namespace MatrisOdev
                 else if (yol != "g")
                 {
                     YolSecimi(yol);
-                    isControlGamePlay = !isControlGamePlay;
+                    isControlKullaniciIsaretle = !isControlKullaniciIsaretle;
                 }
             }
         }
