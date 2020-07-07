@@ -20,16 +20,18 @@ namespace MatrisOdev
         public static int[] kullaniciGiris = new int[10];
         public static string yol = "";
         public static string yon = "";
+        //puan sistemi için "Kullanıcı her yol boyu ilerlediğinde +1 puan alacaktır. (5 Puan)" ifadesi dikkate alındı.
+        //- yön farketmeksizin geçerli durumlarda her hareket +1 puan olarak değerlendirilmiştir.
         public static int puan = 0;
 
 
         public static bool varMiBomba1 = true;
         public static bool varMiBomba2 = true;
-        public static int isControlBombaIslemleri = 0;
         public static bool isControlKullaniciIsaretle = true;
         public static bool isControlBasla = true;
         public static bool isControlYonSecimi = true;
         public static bool isControlOyunBittiMi = true;
+        public static int isControlBombaIslemleri = 0;
 
         //bombaların konumları.
         public static int bomba1X = rnd.Next(1, 9);
@@ -114,7 +116,7 @@ namespace MatrisOdev
                         {
                             matris[i, j] = 1;//yol dışına çıkıp çıkmama durumunu dizinin değerinden kontrol edeceğiz.
                             yol3X++;//yol için her satırda alta inmesini sağlıyoruz.
-                            if ((yol3Y >= 5 && yol3Y < 9) && matris[i, j] == 1)
+                            if ((yol3Y >= 5 && yol3Y < 8) && matris[i, j] == 1)
                             {
                                 yol3Y++;
                             }
@@ -143,7 +145,6 @@ namespace MatrisOdev
         }
 
         //matris çizildikten sonra aralarda kalan boşlukları doldurur.
-        //burası ömür hocaya atılan email sonrasında dönüşte ömür hocanın söyledikleri dikkate alınarak yapılmıştır.
         public static void MatrisDuzenle()
         {
             for (int i = 0; i < 10; i++)
@@ -174,7 +175,7 @@ namespace MatrisOdev
                 {
                     if (matris[i,j] == 1 || matris[i, j] == 2)
                     {
-                        Console.BackgroundColor = ConsoleColor.Green;
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write("1");
                         Console.Write("|");
                         Console.ResetColor();
@@ -185,7 +186,7 @@ namespace MatrisOdev
                         Console.ForegroundColor = ConsoleColor.Black;
                         Console.Write("K");
                         Console.ResetColor();
-                        Console.BackgroundColor = ConsoleColor.Green;
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write("|");
                         Console.ResetColor();
                     }
@@ -367,15 +368,15 @@ namespace MatrisOdev
                 {
                     matris[col, row] = 1;
                     matris[col - 1, row] = 3;
-                    puan += 5;
+                    puan += 1;
                     
                     KonsolTemizle();
                     Console.WriteLine("Puanınız : {0}\n", puan);
                 }
                 else if (matris[col - 1, row] == 0)
                 {
-                    Console.WriteLine("Duvara çarptınız ve puan kaybettiniz. Lütfen yeşil bölgede kalmaya çalışınız.");
-                    puan -= 5;
+                    Console.WriteLine("Duvara çarptınız ve puan kaybettiniz. Lütfen yeşil bölgede kalmaya çalışınız.\n");
+                    puan -= 1;
                     Console.WriteLine("Puanınız : {0}\n", puan);
                 }
                 else if (matris[col - 1, row] == 2)
@@ -406,14 +407,15 @@ namespace MatrisOdev
                 {
                     matris[col, row] = 1;
                     matris[col, row - 1] = 3;
-                    puan += 5;
+                    puan += 1;
+
                     KonsolTemizle();
                     Console.WriteLine("Puanınız : {0}\n", puan);
                 }
                 else if (matris[col, row - 1] == 0)
                 {
-                    Console.WriteLine("Duvara çarptınız ve puan kaybettiniz. Lütfen yeşil bölgede kalmaya çalışınız.");
-                    puan -= 5;
+                    Console.WriteLine("Duvara çarptınız ve puan kaybettiniz. Lütfen yeşil bölgede kalmaya çalışınız.\n");
+                    puan -= 1;
                     Console.WriteLine("Puanınız : {0}\n", puan);
                 }
                 else if (matris[col, row - 1] == 2)
@@ -428,7 +430,7 @@ namespace MatrisOdev
                 }
             }
             else {
-                Console.WriteLine("Lütfen yeşil bölgede kalmaya çalışınız.");
+                Console.WriteLine("Lütfen yeşil bölgede kalmaya çalışınız.\n");
             }
         }
 
@@ -443,14 +445,15 @@ namespace MatrisOdev
                 {
                     matris[col, row] = 1;
                     matris[col + 1, row] = 3;
-                    puan += 5;
+                    puan += 1;
+
                     KonsolTemizle();
                     Console.WriteLine("Puanınız : {0}\n", puan);
                 }
                 else if (matris[col + 1, row] == 0)
                 {
-                    Console.WriteLine("Duvara çarptınız ve puan kaybettiniz. Lütfen yeşil bölgede kalmaya çalışınız.");
-                    puan -= 5;
+                    Console.WriteLine("Duvara çarptınız ve puan kaybettiniz. Lütfen yeşil bölgede kalmaya çalışınız.\n");
+                    puan -= 1;
                     Console.WriteLine("Puanınız : {0}\n", puan);
                 }
                 else if (matris[col + 1, row] == 2)
@@ -463,7 +466,8 @@ namespace MatrisOdev
                     col = 0;
                     row = 0;
                 }
-            }else if(col == 9)
+            }
+            else if(col == 9)
             {
                 KullaniciKonum();
                 matris[col, row] = 1;
@@ -480,29 +484,37 @@ namespace MatrisOdev
         {
             KullaniciKonum();
 
-            if (matris[col, row + 1] == 1 && col < 9)
+            if (row < 9)
             {
-                matris[col, row] = 1;
-                matris[col, row + 1] = 3;
-                puan += 5;
-                KonsolTemizle();
-                Console.WriteLine("Puanınız : {0}\n", puan);
-            }
-            else if (matris[col, row + 1] == 0)
-            {
-                Console.WriteLine("Duvara çarptınız ve puan kaybettiniz. Lütfen yeşil bölgede kalmaya çalışınız.");
-                puan -= 5;
-                Console.WriteLine("Puanınız : {0}\n", puan);
-            }
-            else if (matris[col, row + 1] == 2)
-            {
-                BombaGoster();
-                OyunuBitir(2);
+                if (matris[col, row + 1] == 1)
+                {
+                    matris[col, row] = 1;
+                    matris[col, row + 1] = 3;
+                    puan += 1;
+
+                    KonsolTemizle();
+                    Console.WriteLine("Puanınız : {0}\n", puan);
+                }
+                else if (matris[col, row + 1] == 0)
+                {
+                    Console.WriteLine("Duvara çarptınız ve puan kaybettiniz. Lütfen yeşil bölgede kalmaya çalışınız.\n");
+                    puan -= 1;
+                    Console.WriteLine("Puanınız : {0}\n", puan);
+                }
+                else if (matris[col, row + 1] == 2)
+                {
+                    BombaGoster();
+                    OyunuBitir(2);
+                }
+                else
+                {
+                    col = 0;
+                    row = 0;
+                }
             }
             else
             {
-                col = 0;
-                row = 0;
+                Console.WriteLine("Lütfen yeşil bölgede kalmaya çalışınız.\n");
             }
         }
 
@@ -513,12 +525,12 @@ namespace MatrisOdev
             isControlOyunBittiMi = !isControlOyunBittiMi;
             if(sebep == 2)
             {
-                Console.WriteLine("Bombaya çaptınız!!! Kaybettiniz!!!");
+                Console.WriteLine("Bombaya çaptınız!!! Kaybettiniz!!!\n");
                 Console.WriteLine("Puanınız : 0\n");
             }
             else if(sebep == 5)
             {
-                Console.WriteLine("Oyunu başarıyla tamamladınız. Tebrikler!!!");
+                Console.WriteLine("Oyunu başarıyla tamamladınız. Tebrikler!!!\n");
                 Console.WriteLine("Puanınız : {0}\n", puan);
             }
         }
