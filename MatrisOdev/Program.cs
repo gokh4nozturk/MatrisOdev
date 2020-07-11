@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Reflection;
 
 namespace MatrisOdev
 {
     class Program
     {
         //Değişken isimlendirme formatı olarak Camel Case kullanılmıştır.
+
+        //oyun esnasında gecikmeler için bombaların random yerleştirildiği dikkate alınmalıdır.
 
         //Oyunun çalışma şekli
         //matris içerisinde girilen değerlerden 0 duvarları işaret eder.
